@@ -1,0 +1,65 @@
+/* ==============================
+   USERCHROME.CSS - MINIMALISTA
+   ============================== */
+
+/* Remove a barra de título nativa do Linux */
+#titlebar {
+    display: none !important;
+}
+
+/* Abas */
+.tabbrowser-tab {
+    border-radius: 6px 6px 0 0 !important;
+    margin: 2px !important;
+    padding: 4px 10px !important;
+    background-color: #2e2e3e !important;
+    color: #cfcfcf !important;
+}
+
+/* Aba ativa */
+.tabbrowser-tab[selected="true"] {
+    background-color: #4e4e6e !important;
+    color: #ffffff !important;
+}
+
+/* Barra de ferramentas */
+#navigator-toolbox {
+    background-color: #1e1e2e !important;
+    border: none !important;
+}
+
+/* Botões da barra (voltar, avançar, atualizar) */
+.toolbarbutton-1 {
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+}
+
+/* Barra de favoritos minimalista */
+#PersonalToolbar {
+    background-color: transparent !important;
+    min-height: 24px !important;
+}
+
+/* Menu hamburger */
+#PanelUI-button {
+    background-color: #2e2e3e !important;
+    color: #ffffff !important;
+    border-radius: 4px !important;
+}
+
+/* Scrollbars finas */
+scrollbar {
+    -moz-appearance: none !important;
+    background-color: transparent !important;
+    width: 6px !important;
+}
+
+scrollbar slider {
+    background-color: #4e4e6e !important;
+    border-radius: 3px !important;
+}
+
+/* Remove separadores extras */
+#TabsToolbar .toolbarseparator {
+    display: none !important;
+}

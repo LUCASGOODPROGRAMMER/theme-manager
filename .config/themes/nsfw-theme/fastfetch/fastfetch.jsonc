@@ -1,0 +1,372 @@
+{
+
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "source": "~/.config/themes/nsfw-theme/fastfetch_logos/girl_2.png"
+  },
+
+  "modules": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "separator"
+    },
+    {
+      "type": "os",
+      "key": "  OS",
+      "keyColor": {
+        "1": "38;5;110"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "host",
+      "key": "  Host",
+      "keyColor": {
+        "1": "38;5;111"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "kernel",
+      "key": "  Kernel",
+      "keyColor": {
+        "1": "38;5;177"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "uptime",
+      "key": "󰅐  Uptime",
+      "keyColor": {
+        "1": "38;5;150"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "packages",
+      "key": "  Pacotes",
+      "keyColor": {
+        "1": "38;5;110"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "shell",
+      "key": "  Shell",
+      "keyColor": {
+        "1": "38;5;141"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "display",
+      "key": "  Display",
+      "keyColor": {
+        "1": "38;5;179"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "de",
+      "key": "  DE",
+      "keyColor": {
+        "1": "38;5;179"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "wm",
+      "key": "  WM",
+      "keyColor": {
+        "1": "38;5;110"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "wmtheme",
+      "key": "  Tema WM",
+      "keyColor": {
+        "1": "38;5;179"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "theme",
+      "key": "  Tema",
+      "keyColor": {
+        "1": "38;5;179"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "icons",
+      "key": "󰀻  Ícones",
+      "keyColor": {
+        "1": "38;5;110"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "font",
+      "key": "  Fonte",
+      "keyColor": {
+        "1": "38;5;141"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "cursor",
+      "key": "󰇀  Cursor",
+      "keyColor": {
+        "1": "38;5;110"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "terminal",
+      "key": "  Terminal",
+      "keyColor": {
+        "1": "38;5;110"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "terminalfont",
+      "key": "  Fonte Term.",
+      "keyColor": {
+        "1": "38;5;111"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "cpu",
+      "key": "  CPU",
+      "keyColor": {
+        "1": "38;5;141"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "gpu",
+      "key": "󰍛  GPU",
+      "keyColor": {
+        "1": "38;5;177"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    {
+      "type": "memory",
+      "key": "󰍛  Memória",
+      "keyColor": {
+        "1": "38;5;150"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    // {
+    //   "type": "swap",
+    //   "key": "󰓡  Swap",
+    //   "keyColor": {
+    //     "1": "38;5;111"
+    //   },
+    //   "valueColor": {
+    //     "1": "38;5;250"
+    //   },
+    //   "separator": "  ",
+    //   "separatorColor": {
+    //     "1": "38;5;180"
+    //   }
+    // },
+    {
+      "type": "disk",
+      "key": "󰋊  Disco",
+      "keyColor": {
+        "1": "38;5;179"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    // {
+    //   "type": "localip",
+    //   "key": "󰩠  IP Local",
+    //   "keyColor": {
+    //     "1": "38;5;110"
+    //   },
+    //   "valueColor": {
+    //     "1": "38;5;250"
+    //   },
+    //   "separator": "  ",
+    //   "separatorColor": {
+    //     "1": "38;5;180"
+    //   }
+    // },
+    // {
+    //   "type": "battery",
+    //   "key": "  Bateria",
+    //   "keyColor": {
+    //     "1": "38;5;150"
+    //   },
+    //   "valueColor": {
+    //     "1": "38;5;250"
+    //   },
+    //   "separator": "  ",
+    //   "separatorColor": {
+    //     "1": "38;5;180"
+    //   }
+    // },
+    {
+      "type": "poweradapter",
+      "key": "  Energia",
+      "keyColor": {
+        "1": "38;5;111"
+      },
+      "valueColor": {
+        "1": "38;5;250"
+      },
+      "separator": "  ",
+      "separatorColor": {
+        "1": "38;5;180"
+      }
+    },
+    // {
+    //   "type": "locale",
+    //   "key": "󰌌  Localização",
+    //   "keyColor": {
+    //     "1": "38;5;141"
+    //   },
+    //   "valueColor": {
+    //     "1": "38;5;250"
+    //   },
+    //   "separator": "  ",
+    //   "separatorColor": {
+    //     "1": "38;5;180"
+    //   }
+    // },
+    {
+      "type": "break"
+    }
+    // {
+    //   "type": "colors"
+    // }
+  ]
+}

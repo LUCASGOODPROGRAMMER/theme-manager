@@ -1,0 +1,67 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 20,
+  "spacing": 10,
+
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["clock"],
+  "modules-right": ["pulseaudio", "battery", "bluetooth", "tray"],
+
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "hover-effect": true,
+    "hover-color": "#50FA7B"
+  },
+
+  "hyprland/window": {
+    "separate-outputs": true
+  },
+
+  "clock": {
+    "format": "𒌐{:%H:%M:%S}𒌐",
+    "tooltip-format": "<big>{:%A, %d %B %Y}</big>",
+    "interval": 1
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume}",
+    "format-muted": "MUTADO",
+    "max-length": 20,
+    "interval": 2,
+    "format-icons": ["♩", "♪", "♫", "♬", "𝄞"],
+    "on-click": "bash -c 'if pactl get-sink-mute @DEFAULT_SINK@ | grep -q yes; then notify-send \"Áudio\" \"MUTADO\"; else notify-send \"Áudio\" \"Volume: $(pactl get-sink-volume @DEFAULT_SINK@ | awk '''{print $5}''')\"; fi'",
+    "low-volume-color": "#F1FA8C",
+    "muted-color": "#FF5555",
+    "good-volume-color": "#50FA7B"
+  },
+
+  "battery": {
+    "bat": "BAT0",
+    "interval": 60,
+    "format": "{icon}",
+    "format-icons": ["▁", "▂", "▃", "▅", "█"],
+    "max-length": 25,
+    "states": {
+      "good": 100,
+      "great": 50,
+      "low": 30,
+      "critical": 15
+    },
+    "tooltip": false,
+    "on-click": "bash -c 'notify-send \"Status da Bateria\" \"$(acpi -b)\"'",
+    "charging-symbol": ""
+  },
+
+  "bluetooth": {
+    "format": "",
+    "format-connected": " {device_alias}",
+    "format-connected-battery": " {device_alias} {device_battery_percentage}%",
+    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%"
+  }
+}

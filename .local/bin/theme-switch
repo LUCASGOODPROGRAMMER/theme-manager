@@ -1,0 +1,153 @@
+#!/bin/bash
+# ────────────────────────────────────────────────────────────────
+#  Gerenciador de temas minimalista para Hyprland
+#  Autor: Lucas Nascimento Hubner ✨
+#  Estrutura esperada:
+#  ~/.config/themes/<nome-do-tema>/{hypr, kitty, waybar, fastfetch}
+# ────────────────────────────────────────────────────────────────
+
+set -euo pipefail  # Para abortar em erros e variáveis não definidas
+
+# Diretórios principais
+THEMES_DIR="$HOME/.config/themes"
+HYPR_DIR="$HOME/.config/hypr"
+KITTY_DIR="$HOME/.config/kitty"
+FASTFETCH_DIR="$HOME/.config/fastfetch"
+WAYBAR_DIR="$HOME/.config/waybar"
+FIREFOX_DIR="$HOME/.mozilla/firefox"
+CURRENT_THEME="${1:-}"
+
+# Cores para terminal
+GREEN="\e[1;32m"
+RED="\e[1;31m"
+YELLOW="\e[1;33m"
+BLUE="\e[1;34m"
+RESET="\e[0m"
+
+# ────────────────────────────────────────────────────────────────
+#  Verificações iniciais
+# ────────────────────────────────────────────────────────────────
+if [ -z "$CURRENT_THEME" ]; then
+    echo -e "${RED}❌ Uso:${RESET} theme-switch <nome-do-tema>"
+    exit 1
+fi
+
+if [ ! -d "$THEMES_DIR/$CURRENT_THEME" ]; then
+    echo -e "${RED}❌ Tema '${CURRENT_THEME}' não encontrado em:${RESET} $THEMES_DIR"
+    exit 1
+fi
+
+echo -e "${BLUE}🎨 Aplicando tema:${RESET} ${YELLOW}${CURRENT_THEME}${RESET}"
+
+# ────────────────────────────────────────────────────────────────
+#  Função auxiliar para links simbólicos seguros
+# ────────────────────────────────────────────────────────────────
+link_safe() {
+    local src="$1"
+    local dest="$2"
+    local label="$3"
+
+    if [ -e "$src" ]; then
+        mkdir -p "$(dirname "$dest")"
+        ln -sf "$src" "$dest"
+        echo -e "${GREEN}✔${RESET} $label aplicado"
+    else
+        echo -e "${YELLOW}⚠${RESET} $label ausente em $src"
+    fi
+}
+
+# ────────────────────────────────────────────────────────────────
+#  Aplicar os temas
+# ────────────────────────────────────────────────────────────────
+link_safe "$THEMES_DIR/$CURRENT_THEME/hypr/hyprland.conf" "$HYPR_DIR/hyprland.conf" "Hyprland"
+link_safe "$THEMES_DIR/$CURRENT_THEME/hypr/hyprpaper.conf" "$HYPR_DIR/hyprpaper.conf" "Hyprpaper"
+# link_safe "$THEMES_DIR/$CURRENT_THEME/hypr/hyprlock.conf" "$HYPR_DIR/hyprlock.conf" "Hyprlock"
+link_safe "$THEMES_DIR/$CURRENT_THEME/kitty/kitty.conf" "$KITTY_DIR/kitty.conf" "Kitty"
+link_safe "$THEMES_DIR/$CURRENT_THEME/fastfetch/fastfetch.jsonc" "$FASTFETCH_DIR/config.jsonc" "Fastfetch"
+link_safe "$THEMES_DIR/$CURRENT_THEME/waybar/config.jsonc" "$WAYBAR_DIR/config.jsonc" "Waybar Config"
+link_safe "$THEMES_DIR/$CURRENT_THEME/waybar/style.css" "$WAYBAR_DIR/style.css" "Waybar CSS"
+
+# Substitui a pasta ~/wallpapers pelo tema atual
+THEME_WALLPAPERS="$THEMES_DIR/$CURRENT_THEME/wallpapers"
+HOME_WALLPAPERS="$HOME/wallpapers"
+
+if [ -d "$THEME_WALLPAPERS" ]; then
+    # Remove ou renomeia a pasta atual (opcional: backup)
+    if [ -L "$HOME_WALLPAPERS" ] || [ -d "$HOME_WALLPAPERS" ]; then
+        rm -rf "$HOME_WALLPAPERS"
+    fi
+
+    # Cria link simbólico direto
+    ln -s "$THEME_WALLPAPERS" "$HOME_WALLPAPERS"
+    echo -e "${GREEN}✔${RESET} Wallpapers do tema '${CURRENT_THEME}' aplicados"
+else
+    echo -e "${YELLOW}⚠ Pasta de wallpapers ausente no tema${RESET}"
+fi
+
+# ────────────────────────────────────────────────────────────────
+#  Reiniciar serviços
+# ────────────────────────────────────────────────────────────────
+echo -e "\n${BLUE}🔁 Recarregando ambientes...${RESET}"
+hyprctl reload &>/dev/null
+
+if pgrep -x "hyprpaper" >/dev/null; then
+    killall hyprpaper &>/dev/null
+fi
+hyprpaper &>/dev/null &
+
+if pgrep -x "waybar" >/dev/null; then
+    killall waybar &>/dev/null
+    waybar &>/dev/null &
+fi
+
+echo -e "\n${GREEN}✅ '${CURRENT_THEME}' aplicado com sucesso!${RESET}"
+
+# === GTK com link_safe ===
+GTK_DIR_SRC="$THEMES_DIR/$CURRENT_THEME/gtk"
+GTK_SRC="$GTK_DIR_SRC/settings.ini"
+GTK_CSS_SRC="$GTK_DIR_SRC/gtk.css"
+
+GTK3_DEST="$HOME/.config/gtk-3.0/settings.ini"
+GTK4_DEST="$HOME/.config/gtk-4.0/settings.ini"
+GTK3_CSS_DEST="$HOME/.config/gtk-3.0/gtk.css"
+GTK4_CSS_DEST="$HOME/.config/gtk-4.0/gtk.css"
+
+# Cria diretórios se não existirem
+mkdir -p "$(dirname "$GTK3_DEST")" "$(dirname "$GTK4_DEST")"
+mkdir -p "$(dirname "$GTK3_CSS_DEST")" "$(dirname "$GTK4_CSS_DEST")"
+
+# Aplica links simbólicos de forma segura
+link_safe "$GTK_SRC" "$GTK3_DEST" "GTK3 settings.ini"
+link_safe "$GTK_SRC" "$GTK4_DEST" "GTK4 settings.ini"
+
+if [[ -f "$GTK_CSS_SRC" ]]; then
+    link_safe "$GTK_CSS_SRC" "$GTK3_CSS_DEST" "GTK3 CSS"
+    link_safe "$GTK_CSS_SRC" "$GTK4_CSS_DEST" "GTK4 CSS"
+fi
+
+# Exporta variáveis de ambiente
+if [[ -f "$GTK_SRC" ]]; then
+    GTK_THEME_NAME=$(grep "gtk-theme-name" "$GTK_SRC" | cut -d'=' -f2 | xargs)
+    CURSOR_THEME_NAME=$(grep "gtk-cursor-theme-name" "$GTK_SRC" | cut -d'=' -f2 | xargs)
+    
+    export GTK_THEME="$GTK_THEME_NAME"
+    export XCURSOR_THEME="$CURSOR_THEME_NAME"
+    export XCURSOR_SIZE=24
+fi
+
+# === Firefox com link_safe ===
+FF_PROFILE=$(grep -A1 '^\[Profile[0-9]*\]' "$FIREFOX_DIR/profiles.ini" | grep 'Default=1' -B1 | grep 'Path=' | cut -d'=' -f2 | head -n1)
+
+if [[ -n "$FF_PROFILE" ]]; then
+    FF_PROFILE_PATH="$FIREFOX_DIR/$FF_PROFILE"
+    mkdir -p "$FF_PROFILE_PATH/chrome"
+    link_safe "$THEMES_DIR/$CURRENT_THEME/firefox/chrome/userChrome.css" "$FF_PROFILE_PATH/chrome/userChrome.css" "Firefox userChrome.css"
+
+    # Reinicia o Firefox se estiver aberto
+    if pgrep -x "firefox" >/dev/null; then
+        pkill firefox
+        firefox &>/dev/null &
+    fi
+else
+    echo -e "${YELLOW}⚠ Firefox profile não encontrado.${RESET}"
+fi

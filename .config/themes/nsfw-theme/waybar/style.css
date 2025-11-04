@@ -1,0 +1,55 @@
+* {
+  border: none;
+  border-radius: 0;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 20px;
+}
+
+window#waybar {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: transparent;
+  color: #d0d3ff;
+}
+
+#clock,
+#workspaces,
+#tray,
+#pulseaudio,
+#battery,
+#bluetooth {
+  background-color: #49475e;
+  padding: 2px 10px;
+  margin: 5px;
+  border-radius: 8px;
+}
+
+/* ~battery */
+#battery.good {
+  color: #d0d3ff;
+}
+
+#battery.great {
+  color: #50fa7b;
+}
+
+#battery.low {
+  color: #faef50;
+}
+
+#battery.critical {
+  color: red;
+}
+
+#workspaces button {
+  color: #d0d3ff;
+}
+
+/* bluetooth */
+
+#bluetooth.connected {
+  color: #50fa7b;
+}
+
+#workspaces button.active {
+  color: #d0d3ff;
+}

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+THEMES_DIR="$HOME/.config/themes"
+ROFI="/usr/bin/rofi"
+NOTIFY="/usr/bin/notify-send"
+THEME_SWITCH="$HOME/.local/bin/theme-switch"  # caminho completo!
+
+selected=$(ls "$THEMES_DIR" | "$ROFI" -dmenu -p "🎨 Escolha o tema")
+
+if [ -n "$selected" ]; then
+    "$THEME_SWITCH" "$selected"
+    "$NOTIFY" "🎨 Tema aplicado" "Agora usando: $selected"
+fi
