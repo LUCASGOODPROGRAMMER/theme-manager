@@ -1,0 +1,111 @@
+/* ────────────────────────────────
+   WAYBAR THEME — Ghost (Black & White)
+   by Lucas Nascimento Hubner ✨
+   ──────────────────────────────── */
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "JetBrainsMono Nerd Font", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  min-height: 0;
+}
+
+/* Barra principal */
+window#waybar {
+  background-color: rgba(10, 10, 10, 0.55);
+  color: #e5e5e5;
+  transition-property: background-color;
+  transition-duration: 0.5s;
+}
+
+/* Módulos (blocos da barra) */
+#workspaces,
+#tray,
+#pulseaudio,
+#battery,
+#bluetooth,
+#clock {
+  padding: 0 10px;
+  margin: 4px 6px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ──────────────── WORKSPACES ──────────────── */
+#workspaces button {
+  color: #a0a0a0;
+  padding: 0 8px;
+  background: transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+#workspaces button.active {
+  color: #ffffff;
+}
+
+#workspaces button:hover {
+  color: #ff4d4d;
+  background-color: rgba(255, 77, 77, 0.1);
+}
+
+/* ──────────────── BATTERY ──────────────── */
+#battery {
+  color: #cccccc;
+}
+
+#battery.good {
+  color: #aaffaa;
+}
+
+#battery.great {
+  color: #9aff9a;
+}
+
+#battery.low {
+  color: #faef50;
+}
+
+#battery.critical {
+  color: #ff4d4d;
+  font-weight: bold;
+}
+
+/* ──────────────── BLUETOOTH ──────────────── */
+#bluetooth.connected {
+  color: #e0e0e0;
+}
+
+#bluetooth.disconnected {
+  color: #555555;
+}
+
+/* ──────────────── AUDIO ──────────────── */
+#pulseaudio {
+  color: #bfbfbf;
+}
+
+#pulseaudio.muted {
+  color: #777777;
+}
+
+/* ──────────────── TRAY ──────────────── */
+#tray {
+  color: #dddddd;
+}
+
+/* ──────────────── CLOCK ──────────────── */
+#clock {
+  color: #f5f5f5;
+  font-weight: 500;
+}
+
+/* ──────────────── EFEITO HOVER ──────────────── */
+#tray:hover,
+#pulseaudio:hover,
+#battery:hover,
+#bluetooth:hover,
+#clock:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}

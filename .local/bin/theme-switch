@@ -49,6 +49,7 @@ link_safe() {
 
     if [ -e "$src" ]; then
         mkdir -p "$(dirname "$dest")"
+        [ -e "$dest" ] && rm -rf "$dest"
         ln -sf "$src" "$dest"
         echo -e "${GREEN}✔${RESET} $label aplicado"
     else
@@ -85,6 +86,30 @@ else
 fi
 
 # ────────────────────────────────────────────────────────────────
+#  Gerenciar wallpapers animados
+# ────────────────────────────────────────────────────────────────
+# Mata mpvpaper em todos os temas, exceto no animado
+if pgrep -x "mpvpaper" >/dev/null; then
+    killall mpvpaper &>/dev/null
+fi
+
+# Se o tema atual for o tema com vídeo, inicia o mpvpaper
+if [[ "$CURRENT_THEME" == "call-of-duty-theme" ]]; then
+    echo -e "${BLUE}🎞 Iniciando wallpaper animado...${RESET}"
+    # Mata o hyprpaper se estiver em execução
+    if pgrep -x "hyprpaper" >/dev/null; then
+        echo -e "${YELLOW}🧹 Matando hyprpaper...${RESET}"
+        pkill -9 hyprpaper
+        sleep 1
+    fi
+
+    sleep 2
+    # Inicia o vídeo como wallpaper
+    mpvpaper -o "no-audio loop --no-osc --panscan=1.0" eDP-1 "$HOME/wallpapers/ghost.mp4" &>/dev/null &
+fi
+
+
+# ────────────────────────────────────────────────────────────────
 #  Reiniciar serviços
 # ────────────────────────────────────────────────────────────────
 echo -e "\n${BLUE}🔁 Recarregando ambientes...${RESET}"
@@ -99,8 +124,6 @@ if pgrep -x "waybar" >/dev/null; then
     killall waybar &>/dev/null
     waybar &>/dev/null &
 fi
-
-echo -e "\n${GREEN}✅ '${CURRENT_THEME}' aplicado com sucesso!${RESET}"
 
 # === GTK com link_safe ===
 GTK_DIR_SRC="$THEMES_DIR/$CURRENT_THEME/gtk"
@@ -151,3 +174,5 @@ if [[ -n "$FF_PROFILE" ]]; then
 else
     echo -e "${YELLOW}⚠ Firefox profile não encontrado.${RESET}"
 fi
+
+echo -e "\n${GREEN}✅ '${CURRENT_THEME}' aplicado com sucesso!${RESET}"
