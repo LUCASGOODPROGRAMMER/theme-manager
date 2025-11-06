@@ -8,7 +8,9 @@
 
 set -euo pipefail  # Para abortar em erros e variáveis não definidas
 
-# Diretórios principais
+# ────────────────────────────────────────────────────────────────
+#  Diretórios principais
+# ────────────────────────────────────────────────────────────────
 THEMES_DIR="$HOME/.config/themes"
 HYPR_DIR="$HOME/.config/hypr"
 KITTY_DIR="$HOME/.config/kitty"
@@ -16,8 +18,11 @@ FASTFETCH_DIR="$HOME/.config/fastfetch"
 WAYBAR_DIR="$HOME/.config/waybar"
 FIREFOX_DIR="$HOME/.mozilla/firefox"
 CURRENT_THEME="${1:-}"
+HOME_WALLPAPERS="$HOME/wallpapers"
 
-# Cores para terminal
+# ────────────────────────────────────────────────────────────────
+#  Cores para terminal
+# ────────────────────────────────────────────────────────────────
 GREEN="\e[1;32m"
 RED="\e[1;31m"
 YELLOW="\e[1;33m"
@@ -25,23 +30,9 @@ BLUE="\e[1;34m"
 RESET="\e[0m"
 
 # ────────────────────────────────────────────────────────────────
-#  Verificações iniciais
+#  Funções auxiliares
 # ────────────────────────────────────────────────────────────────
-if [ -z "$CURRENT_THEME" ]; then
-    echo -e "${RED}❌ Uso:${RESET} theme-switch <nome-do-tema>"
-    exit 1
-fi
 
-if [ ! -d "$THEMES_DIR/$CURRENT_THEME" ]; then
-    echo -e "${RED}❌ Tema '${CURRENT_THEME}' não encontrado em:${RESET} $THEMES_DIR"
-    exit 1
-fi
-
-echo -e "${BLUE}🎨 Aplicando tema:${RESET} ${YELLOW}${CURRENT_THEME}${RESET}"
-
-# ────────────────────────────────────────────────────────────────
-#  Função auxiliar para links simbólicos seguros
-# ────────────────────────────────────────────────────────────────
 link_safe() {
     local src="$1"
     local dest="$2"
@@ -57,122 +48,124 @@ link_safe() {
     fi
 }
 
-# ────────────────────────────────────────────────────────────────
-#  Aplicar os temas
-# ────────────────────────────────────────────────────────────────
-link_safe "$THEMES_DIR/$CURRENT_THEME/hypr/hyprland.conf" "$HYPR_DIR/hyprland.conf" "Hyprland"
-link_safe "$THEMES_DIR/$CURRENT_THEME/hypr/hyprpaper.conf" "$HYPR_DIR/hyprpaper.conf" "Hyprpaper"
-# link_safe "$THEMES_DIR/$CURRENT_THEME/hypr/hyprlock.conf" "$HYPR_DIR/hyprlock.conf" "Hyprlock"
-link_safe "$THEMES_DIR/$CURRENT_THEME/kitty/kitty.conf" "$KITTY_DIR/kitty.conf" "Kitty"
-link_safe "$THEMES_DIR/$CURRENT_THEME/fastfetch/fastfetch.jsonc" "$FASTFETCH_DIR/config.jsonc" "Fastfetch"
-link_safe "$THEMES_DIR/$CURRENT_THEME/waybar/config.jsonc" "$WAYBAR_DIR/config.jsonc" "Waybar Config"
-link_safe "$THEMES_DIR/$CURRENT_THEME/waybar/style.css" "$WAYBAR_DIR/style.css" "Waybar CSS"
-
-# Substitui a pasta ~/wallpapers pelo tema atual
-THEME_WALLPAPERS="$THEMES_DIR/$CURRENT_THEME/wallpapers"
-HOME_WALLPAPERS="$HOME/wallpapers"
-
-if [ -d "$THEME_WALLPAPERS" ]; then
-    # Remove ou renomeia a pasta atual (opcional: backup)
-    if [ -L "$HOME_WALLPAPERS" ] || [ -d "$HOME_WALLPAPERS" ]; then
-        rm -rf "$HOME_WALLPAPERS"
+check_theme() {
+    if [ -z "$CURRENT_THEME" ]; then
+        echo -e "${RED}❌ Uso:${RESET} theme-switch <nome-do-tema>"
+        exit 1
     fi
 
-    # Cria link simbólico direto
-    ln -s "$THEME_WALLPAPERS" "$HOME_WALLPAPERS"
-    echo -e "${GREEN}✔${RESET} Wallpapers do tema '${CURRENT_THEME}' aplicados"
-else
-    echo -e "${YELLOW}⚠ Pasta de wallpapers ausente no tema${RESET}"
-fi
-
-# ────────────────────────────────────────────────────────────────
-#  Gerenciar wallpapers animados
-# ────────────────────────────────────────────────────────────────
-# Mata mpvpaper em todos os temas, exceto no animado
-if pgrep -x "mpvpaper" >/dev/null; then
-    killall mpvpaper &>/dev/null
-fi
-
-# Se o tema atual for o tema com vídeo, inicia o mpvpaper
-if [[ "$CURRENT_THEME" == "call-of-duty-theme" ]]; then
-    echo -e "${BLUE}🎞 Iniciando wallpaper animado...${RESET}"
-    # Mata o hyprpaper se estiver em execução
-    if pgrep -x "hyprpaper" >/dev/null; then
-        echo -e "${YELLOW}🧹 Matando hyprpaper...${RESET}"
-        pkill -9 hyprpaper
-        sleep 1
+    if [ ! -d "$THEMES_DIR/$CURRENT_THEME" ]; then
+        echo -e "${RED}❌ Tema '${CURRENT_THEME}' não encontrado em:${RESET} $THEMES_DIR"
+        exit 1
     fi
 
-    sleep 2
-    # Inicia o vídeo como wallpaper
-    mpvpaper -o "no-audio loop --no-osc --panscan=1.0" eDP-1 "$HOME/wallpapers/ghost.mp4" &>/dev/null &
-fi
+    echo -e "${BLUE}🎨 Aplicando tema:${RESET} ${YELLOW}${CURRENT_THEME}${RESET}"
+}
 
+apply_theme_files() {
+    link_safe "$THEMES_DIR/$CURRENT_THEME/hypr/hyprland.conf" "$HYPR_DIR/hyprland.conf" "Hyprland"
+    link_safe "$THEMES_DIR/$CURRENT_THEME/hypr/hyprpaper.conf" "$HYPR_DIR/hyprpaper.conf" "Hyprpaper"
+    link_safe "$THEMES_DIR/$CURRENT_THEME/hypr/hyprlock.conf" "$HYPR_DIR/hyprlock.conf" "Hyprlock"
+    link_safe "$THEMES_DIR/$CURRENT_THEME/kitty/kitty.conf" "$KITTY_DIR/kitty.conf" "Kitty"
+    link_safe "$THEMES_DIR/$CURRENT_THEME/fastfetch/fastfetch.jsonc" "$FASTFETCH_DIR/config.jsonc" "Fastfetch"
+    link_safe "$THEMES_DIR/$CURRENT_THEME/waybar/config.jsonc" "$WAYBAR_DIR/config.jsonc" "Waybar Config"
+    link_safe "$THEMES_DIR/$CURRENT_THEME/waybar/style.css" "$WAYBAR_DIR/style.css" "Waybar CSS"
+}
 
-# ────────────────────────────────────────────────────────────────
-#  Reiniciar serviços
-# ────────────────────────────────────────────────────────────────
-echo -e "\n${BLUE}🔁 Recarregando ambientes...${RESET}"
-hyprctl reload &>/dev/null
+apply_wallpapers() {
+    local theme_wallpapers="$THEMES_DIR/$CURRENT_THEME/wallpapers"
 
-if pgrep -x "hyprpaper" >/dev/null; then
-    killall hyprpaper &>/dev/null
-fi
-hyprpaper &>/dev/null &
-
-if pgrep -x "waybar" >/dev/null; then
-    killall waybar &>/dev/null
-    waybar &>/dev/null &
-fi
-
-# === GTK com link_safe ===
-GTK_DIR_SRC="$THEMES_DIR/$CURRENT_THEME/gtk"
-GTK_SRC="$GTK_DIR_SRC/settings.ini"
-GTK_CSS_SRC="$GTK_DIR_SRC/gtk.css"
-
-GTK3_DEST="$HOME/.config/gtk-3.0/settings.ini"
-GTK4_DEST="$HOME/.config/gtk-4.0/settings.ini"
-GTK3_CSS_DEST="$HOME/.config/gtk-3.0/gtk.css"
-GTK4_CSS_DEST="$HOME/.config/gtk-4.0/gtk.css"
-
-# Cria diretórios se não existirem
-mkdir -p "$(dirname "$GTK3_DEST")" "$(dirname "$GTK4_DEST")"
-mkdir -p "$(dirname "$GTK3_CSS_DEST")" "$(dirname "$GTK4_CSS_DEST")"
-
-# Aplica links simbólicos de forma segura
-link_safe "$GTK_SRC" "$GTK3_DEST" "GTK3 settings.ini"
-link_safe "$GTK_SRC" "$GTK4_DEST" "GTK4 settings.ini"
-
-if [[ -f "$GTK_CSS_SRC" ]]; then
-    link_safe "$GTK_CSS_SRC" "$GTK3_CSS_DEST" "GTK3 CSS"
-    link_safe "$GTK_CSS_SRC" "$GTK4_CSS_DEST" "GTK4 CSS"
-fi
-
-# Exporta variáveis de ambiente
-if [[ -f "$GTK_SRC" ]]; then
-    GTK_THEME_NAME=$(grep "gtk-theme-name" "$GTK_SRC" | cut -d'=' -f2 | xargs)
-    CURSOR_THEME_NAME=$(grep "gtk-cursor-theme-name" "$GTK_SRC" | cut -d'=' -f2 | xargs)
-    
-    export GTK_THEME="$GTK_THEME_NAME"
-    export XCURSOR_THEME="$CURSOR_THEME_NAME"
-    export XCURSOR_SIZE=24
-fi
-
-# === Firefox com link_safe ===
-FF_PROFILE=$(grep -A1 '^\[Profile[0-9]*\]' "$FIREFOX_DIR/profiles.ini" | grep 'Default=1' -B1 | grep 'Path=' | cut -d'=' -f2 | head -n1)
-
-if [[ -n "$FF_PROFILE" ]]; then
-    FF_PROFILE_PATH="$FIREFOX_DIR/$FF_PROFILE"
-    mkdir -p "$FF_PROFILE_PATH/chrome"
-    link_safe "$THEMES_DIR/$CURRENT_THEME/firefox/chrome/userChrome.css" "$FF_PROFILE_PATH/chrome/userChrome.css" "Firefox userChrome.css"
-
-    # Reinicia o Firefox se estiver aberto
-    if pgrep -x "firefox" >/dev/null; then
-        pkill firefox
-        firefox &>/dev/null &
+    if [ -d "$theme_wallpapers" ]; then
+        [ -L "$HOME_WALLPAPERS" ] || [ -d "$HOME_WALLPAPERS" ] && rm -rf "$HOME_WALLPAPERS"
+        ln -s "$theme_wallpapers" "$HOME_WALLPAPERS"
+        echo -e "${GREEN}✔${RESET} Wallpapers do tema '${CURRENT_THEME}' aplicados"
+    else
+        echo -e "${YELLOW}⚠ Pasta de wallpapers ausente no tema${RESET}"
     fi
-else
-    echo -e "${YELLOW}⚠ Firefox profile não encontrado.${RESET}"
-fi
+}
+
+manage_animated_wallpaper() {
+    # Mata mpvpaper em todos os temas, exceto no animado
+    pgrep -x "mpvpaper" &>/dev/null && killall mpvpaper &>/dev/null
+
+    if [[ "$CURRENT_THEME" == "call-of-duty-theme" ]]; then
+        echo -e "${BLUE}🎞 Iniciando wallpaper animado...${RESET}"
+        pkill -9 hyprpaper 2>/dev/null &
+        sleep 0.5
+        mpvpaper -o "no-audio loop --no-osc --panscan=1.0" eDP-1 "$HOME/wallpapers/ghost.mp4" &>/dev/null &
+    fi
+}
+
+reload_services() {
+    echo -e "\n${BLUE}🔁 Recarregando ambientes...${RESET}"
+    hyprctl reload &>/dev/null
+
+    if [[ "$CURRENT_THEME" != "call-of-duty-theme" ]]; then
+        pgrep -x "hyprpaper" &>/dev/null && killall hyprpaper &>/dev/null
+        hyprpaper &>/dev/null &
+    fi
+
+    if pgrep -x "waybar" &>/dev/null; then
+        killall waybar &>/dev/null
+        waybar &>/dev/null &
+    fi
+}
+
+apply_gtk_theme() {
+    local GTK_DIR_SRC="$THEMES_DIR/$CURRENT_THEME/gtk"
+    local GTK_SRC="$GTK_DIR_SRC/settings.ini"
+    local GTK_CSS_SRC="$GTK_DIR_SRC/gtk.css"
+
+    local GTK3_DEST="$HOME/.config/gtk-3.0/settings.ini"
+    local GTK4_DEST="$HOME/.config/gtk-4.0/settings.ini"
+    local GTK3_CSS_DEST="$HOME/.config/gtk-3.0/gtk.css"
+    local GTK4_CSS_DEST="$HOME/.config/gtk-4.0/gtk.css"
+
+    mkdir -p "$(dirname "$GTK3_DEST")" "$(dirname "$GTK4_DEST")"
+    mkdir -p "$(dirname "$GTK3_CSS_DEST")" "$(dirname "$GTK4_CSS_DEST")"
+
+    link_safe "$GTK_SRC" "$GTK3_DEST" "GTK3 settings.ini"
+    link_safe "$GTK_SRC" "$GTK4_DEST" "GTK4 settings.ini"
+
+    [[ -f "$GTK_CSS_SRC" ]] && link_safe "$GTK_CSS_SRC" "$GTK3_CSS_DEST" "GTK3 CSS"
+    [[ -f "$GTK_CSS_SRC" ]] && link_safe "$GTK_CSS_SRC" "$GTK4_CSS_DEST" "GTK4 CSS"
+
+    if [[ -f "$GTK_SRC" ]]; then
+        GTK_THEME_NAME=$(grep "gtk-theme-name" "$GTK_SRC" | cut -d'=' -f2 | xargs)
+        CURSOR_THEME_NAME=$(grep "gtk-cursor-theme-name" "$GTK_SRC" | cut -d'=' -f2 | xargs)
+
+        export GTK_THEME="$GTK_THEME_NAME"
+        export XCURSOR_THEME="$CURSOR_THEME_NAME"
+        export XCURSOR_SIZE=24
+    fi
+}
+
+apply_firefox_theme() {
+    local FF_PROFILE
+    FF_PROFILE=$(grep -A1 '^\[Profile[0-9]*\]' "$FIREFOX_DIR/profiles.ini" \
+        | grep 'Default=1' -B1 | grep 'Path=' | cut -d'=' -f2 | head -n1)
+
+    if [[ -n "$FF_PROFILE" ]]; then
+        local FF_PROFILE_PATH="$FIREFOX_DIR/$FF_PROFILE"
+        mkdir -p "$FF_PROFILE_PATH/chrome"
+        link_safe "$THEMES_DIR/$CURRENT_THEME/firefox/chrome/userChrome.css" \
+                  "$FF_PROFILE_PATH/chrome/userChrome.css" "Firefox userChrome.css"
+
+        pgrep -x "firefox" &>/dev/null && pkill firefox && firefox &>/dev/null &
+    else
+        echo -e "${YELLOW}⚠ Firefox profile não encontrado.${RESET}"
+    fi
+}
+
+# ────────────────────────────────────────────────────────────────
+#  Execução
+# ────────────────────────────────────────────────────────────────
+check_theme
+apply_theme_files
+apply_wallpapers
+manage_animated_wallpaper
+reload_services
+apply_gtk_theme
+apply_firefox_theme
 
 echo -e "\n${GREEN}✅ '${CURRENT_THEME}' aplicado com sucesso!${RESET}"
