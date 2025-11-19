@@ -1,9 +1,4 @@
-Perfeito! Aqui está **tudo em um único bloco**, no mesmo estilo que você quer, pronto para copiar e colar:
-
----
-
-🔹 **HYPRLAND - Atalhos Principais** 🔹
-
+echo "🔹 **HYPRLAND - Atalhos Principais** 🔹
 🖥️ **Janelas e Programas**
 SUPER + Q       → Abrir terminal
 SUPER + C       → Fechar janela ativa
@@ -45,4 +40,4 @@ SUPER + mouse_up    → Ir para workspace atrás
 hyprctl reload      → Recarregar configuração
 hyprctl binds       → Mostrar atalhos ativos
 hyprctl monitors    → Mostrar monitores
-hyprctl clients     → Mostrar janelas abertas
+hyprctl clients     → Mostrar janelas abertas"

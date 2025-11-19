@@ -91,7 +91,7 @@ manage_animated_wallpaper() {
     if [[ "$CURRENT_THEME" == "call-of-duty-theme" ]]; then
         echo -e "${BLUE}🎞 Iniciando wallpaper animado...${RESET}"
         pkill -9 hyprpaper 2>/dev/null &
-        sleep 0.5
+        # sleep 0.5
         mpvpaper -o "no-audio loop --no-osc --panscan=1.0" eDP-1 "$HOME/wallpapers/ghost.mp4" &>/dev/null &
     fi
 }
